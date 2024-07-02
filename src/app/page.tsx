@@ -18,13 +18,13 @@ export default function Home() {
           }
         >
           <h1 className="text-sm font-semibold text-gray-700">
-            <span className={"font-bold text-blue-500"}>Arnica</span> is now
+            <span className={"font-bold text-violet-500"}>Arnica</span> is now
             public!
           </h1>
         </div>
         <h1 className={"max-w-4xl text-5xl font-bold lg:text-7xl md:text-6xl"}>
           Chat with your{" "}
-          <span className={"text-blue-500 font-light font-sans"}>
+          <span className={"text-violet-500 font-light font-sans"}>
             Document
           </span>{" "}
           in seconds.
@@ -132,7 +132,7 @@ export default function Home() {
               <div className={"flex-shrink-0"}>
                 <div
                   className={
-                    "mx-5 flex items-center justify-center w-10 h-10 rounded-full bg-blue-400 text-white hover:bg-blue-500"
+                    "mx-5 flex items-center justify-center w-10 h-10 rounded-full bg-violet-400 text-white hover:bg-violet-500"
                   }
                 >
                   1
@@ -174,7 +174,7 @@ export default function Home() {
               <div className={"flex-shrink-0"}>
                 <div
                   className={
-                    "mx-5 flex items-center justify-center w-10 h-10 rounded-full bg-blue-400 text-white hover:bg-blue-500"
+                    "mx-5 flex items-center justify-center w-10 h-10 rounded-full bg-violet-400 text-white hover:bg-violet-500"
                   }
                 >
                   2
@@ -208,7 +208,7 @@ export default function Home() {
               <div className={"flex-shrink-0"}>
                 <div
                   className={
-                    "mx-5 flex items-center justify-center w-10 h-10 rounded-full bg-blue-400 text-white hover:bg-blue-500"
+                    "mx-5 flex items-center justify-center w-10 h-10 rounded-full bg-violet-400 text-white hover:bg-violet-500"
                   }
                 >
                   3
