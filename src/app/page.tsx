@@ -14,7 +14,7 @@ export default function Home() {
       >
         <div
           className={
-            "mx-auto mb-4 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-b-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur hover:border-yellow-300 hover:bg-yellow-50"
+            "mx-auto mb-4 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-b-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur hover:border-violet-300 hover:bg-violet-50"
           }
         >
           <h1 className="text-sm font-semibold text-gray-700">

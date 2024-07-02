@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "Arnica",
   description: "Chat with your document in seconds",
   icons: {
-    icon: "/vercel.svg",
+    icon: "/logoImg.png",
   },
 };
 
