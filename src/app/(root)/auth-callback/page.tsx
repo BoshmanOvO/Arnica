@@ -1,5 +1,5 @@
-import React from 'react';
 import {useRouter, useSearchParams} from "next/navigation";
+import {tRPC} from "@/app/_trpc/client";
 
 
 const Page = () => {
@@ -7,11 +7,7 @@ const Page = () => {
 	const searchParams = useSearchParams();
 	const origin = searchParams.get("origin");
 	
-	return (
-		<div>
-		
-		</div>
-	);
+	const {data} = tRPC.test.useQuery();
 };
 
 export default Page;
