@@ -55,7 +55,6 @@ const NavBar = () => {
                   size: "sm",
                 })}
                 href={"/dashboard"}
-                target={"_blank"}
               >
                 Sign In
               </Link>

@@ -1,0 +1,20 @@
+import {internalMutation, mutation} from "./_generated/server";
+import {v} from "convex/values";
+
+export const createUser = internalMutation({
+  args: {
+    Id: v.string(),
+    email: v.string(),
+    imageUrl: v.string(),
+    name: v.string(),
+  },
+  async handler(ctx, args) {
+    await ctx.db.insert("user", {
+      Id: args.Id,
+      email: args.email,
+      imageUrl: args.imageUrl,
+      name: args.name,
+      files: [],
+    });
+  },
+});

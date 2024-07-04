@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import NavBar from "@/components/NavBar";
 import React from "react";
-import {ConvexClientProvider} from "@/provider/ConvexClientProvider";
+import ConvexClerkProvider from "@/provider/ConvexClerkProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ConvexClerkProvider>
       <html lang="en">
         <body
           className={cn(
@@ -32,9 +31,9 @@ export default function RootLayout({
           )}
         >
           <NavBar />
-          <ConvexClientProvider>{children}</ConvexClientProvider>
+          {children}
         </body>
       </html>
-    </ClerkProvider>
+    </ConvexClerkProvider>
   );
 }
