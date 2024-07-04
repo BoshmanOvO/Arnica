@@ -10,17 +10,19 @@ export const uploadStatus = v.union(
 );
 
 export default defineSchema({
-  user: defineTable({
-    Id: v.string(),
+  users: defineTable({
+    clerkId: v.string(),
     name: v.string(),
     email: v.string(),
     imageUrl: v.string(),
-    files: v.optional(v.array(v.id("files"))),
+    files: v.array(v.id("files")),
   }),
   files: defineTable({
     name: v.string(),
+    // fileUrl: v.string(),
+    // key: v.string(),
     uploadStatus,
     fileId: v.id("_storage"),
-    userId: v.string(),
+    userId: v.id("users"),
   }),
 });

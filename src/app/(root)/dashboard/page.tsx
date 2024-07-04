@@ -7,16 +7,19 @@ import Lottie from "lottie-react";
 import "@lottiefiles/lottie-player";
 import Cloud from "../../../../public/cloud.json";
 import Loading from "../../../../public/loading.json";
-import { Doc } from "../../../../convex/_generated/dataModel";
 import Link from "next/link";
 import { MessageSquare, Plus, TrashIcon } from "lucide-react";
 import { format, formatRelative, subDays } from "date-fns";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
   const user = useUser();
-  const userId = user?.user?.id ?? "";
-  const allFiles = useQuery(api.file.getAllFile, { userId });
+  const clerkId = user?.user?.id ?? "";
+  console.log(clerkId);
+  const allFiles = useQuery(api.file.getAllFile, { clerkId });
+  const deleteFile = useMutation(api.file.deleteFile);
+  const { toast } = useToast();
   const isLoading = allFiles == undefined;
   return (
     <main className={"mx-auto max-w-7xl md:p-10"}>
@@ -83,6 +86,13 @@ const Dashboard = () => {
                   variant={"destructive"}
                   size={"sm"}
                   className={"w-full"}
+                  onClick={async () => {
+                    await deleteFile({ fileId: file._id });
+                    toast({
+                      title: `File named ${file.name}, Deleted Successfully`,
+                      variant: "destructive",
+                    });
+                  }}
                 >
                   <TrashIcon className={"h-4 w-4"} />
                 </Button>
@@ -108,7 +118,7 @@ const Dashboard = () => {
         >
           <div className={"lg:md:size-96 size-50 flex flex-col items-center"}>
             <Lottie animationData={Cloud} />
-            <h3 className={"font-semibold text-xl text-zinc-700 flex truncate"}>
+            <h3 className={"font-semibold text-xl text-zinc-700 flex"}>
               Pretty empty around here
             </h3>
           </div>
@@ -119,3 +129,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+// TODO : toast not working

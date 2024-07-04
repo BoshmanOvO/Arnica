@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import NavBar from "@/components/NavBar";
 import React from "react";
 import ConvexClerkProvider from "@/provider/ConvexClerkProvider";
+import {Toaster} from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
           )}
         >
           <NavBar />
+          <Toaster />
           {children}
         </body>
       </html>
