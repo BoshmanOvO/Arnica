@@ -8,33 +8,48 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Dropzone from "react-dropzone";
-import { CloudUpload, File } from "lucide-react";
+import { CloudUpload, File, Loader2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { useUploadThing } from "@/lib/uploadthing";
 import { useToast } from "@/components/ui/use-toast";
+import { useMutation } from "convex/react";
+import { api } from "../../convex/_generated/api";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
-// TODO : i will use upload stuff here with convex it is easy
+type UploadStatus = "pending" | "processing" | "failed" | "success";
 
 const UploadDropZone = () => {
-  const [uploading, setUploading] = useState<boolean>(true);
+  const user = useUser();
+  const userId = user?.user?.id ?? ""; // user_1111
+
+  const [uploading, setUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const { startUpload } = useUploadThing("pdfUploader");
+  const [status, setStatus] = useState<UploadStatus>("pending");
+
+  const createFile = useMutation(api.file.createFile);
+  const generateUploadUrl = useMutation(api.file.generateUploadUrl);
+  const getFile = useMutation(api.file.getFile);
+
   const { toast } = useToast();
+  const router = useRouter();
 
   const startSimulatingProgress = () => {
     setUploadProgress(0);
+    setStatus("processing");
     const interval = setInterval(() => {
       setUploadProgress((prev) => {
         if (prev >= 95) {
           clearInterval(interval);
           return prev;
         } else {
+          setStatus("processing");
           return prev + 5;
         }
       });
     }, 500);
     return interval;
   };
+
   return (
     <Dropzone
       multiple={false}
@@ -42,26 +57,41 @@ const UploadDropZone = () => {
         console.log(accepted);
         setUploading(true);
         const progressInterval = startSimulatingProgress();
-        const response = await startUpload(accepted);
-        if (!response) {
+        const postUrl = await generateUploadUrl();
+        const result = await fetch(postUrl, {
+          method: "POST",
+          headers: { "Content-Type": accepted[0].type },
+          body: accepted[0],
+        });
+        console.log(accepted[0].type);
+        const { storageId } = await result.json();
+        try {
+          await new Promise((resolve) => setTimeout(resolve, 10000));
+          clearInterval(progressInterval);
+          setUploadProgress(100);
+          setStatus("success");
+          // TODO : upload status not working
+          await createFile({
+            name: accepted[0].name,
+            fileId: storageId,
+            uploadStatus: status,
+            clerkId: userId,
+            fileSize: accepted[0].size,
+          });
+          const f = await getFile({ storageId });
           toast({
-            title: `Error in Uploading file`,
-            description: `Please try again later`,
+            title: `File named: ${accepted[0].name}, Uploaded successfully`,
+            variant: "success",
+          });
+          router.push(`/dashboard/${f?._id}`);
+        } catch (error) {
+          setStatus("failed");
+          toast({
+            title: "Error in uploading file",
+            description: "Please try again later",
             variant: "destructive",
           });
         }
-        const [fileRosponse] = response;
-        const key = fileRosponse?.key; // this key will later store in the database;
-        if (!key) {
-          toast({
-            title: `Error in Uploading file`,
-            description: `Please try again later`,
-            variant: "destructive",
-          });
-        }
-        await new Promise((resolve) => setTimeout(resolve, 10000));
-        clearInterval(progressInterval);
-        setUploadProgress(100);
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
@@ -109,8 +139,24 @@ const UploadDropZone = () => {
                     value={uploadProgress}
                     className={"h-1 w-full bg-zinc-200"}
                   />
+                  {uploadProgress === 100 ? (
+                    <div
+                      className={
+                        "flex gap-1 items-center justify-center text-sm text-zinc-700 text-center pt-2"
+                      }
+                    >
+                      <Loader2 className={"h-3 w-3 animate-spin"} />{" "}
+                      Redirecting...
+                    </div>
+                  ) : null}
                 </div>
               ) : null}
+              <input
+                {...getInputProps()}
+                type={"file"}
+                id={"dropzone-file"}
+                className={"hidden"}
+              />
             </label>
           </div>
         </section>
@@ -120,9 +166,15 @@ const UploadDropZone = () => {
 };
 
 const UploadButton = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(v) => {
+        if (!v) setIsOpen(v);
+      }}
+    >
+      <DialogTrigger onClick={() => setIsOpen(true)} asChild>
         <Button>Upload File</Button>
       </DialogTrigger>
       <DialogContent>

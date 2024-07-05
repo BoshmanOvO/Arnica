@@ -1,6 +1,6 @@
 "use client";
 import UploadButton from "@/components/UploadButton";
-import { useMutation, useQuery } from "convex/react";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import Lottie from "lottie-react";
@@ -14,10 +14,12 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
+  const { isAuthenticated } = useConvexAuth();
+  if (!isAuthenticated) return null;
   const user = useUser();
-  const clerkId = user?.user?.id ?? "";
-  console.log(clerkId);
-  const allFiles = useQuery(api.file.getAllFile, { clerkId });
+  const userId = user?.user?.id ?? "";
+  console.log(userId);
+  const allFiles = useQuery(api.file.getAllFilesForUser, { userId });
   const deleteFile = useMutation(api.file.deleteFile);
   const { toast } = useToast();
   const isLoading = allFiles == undefined;
@@ -35,7 +37,7 @@ const Dashboard = () => {
       {allFiles && allFiles?.length > 0 ? (
         <ul
           className={
-            "mt-8 grid grid-cols-1 gap-6 divide-y divide-zinc-200 md:grid-cols-2 lg:grid-cols-3 sm:p-3"
+            "mt-8 grid grid-cols-1 gap-6 divide-y divide-zinc-200 md:grid-cols-2 lg:grid-cols-3 mr-3 ml-3"
           }
         >
           {allFiles.map((file) => (

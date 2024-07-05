@@ -15,14 +15,15 @@ export default defineSchema({
     name: v.string(),
     email: v.string(),
     imageUrl: v.string(),
-    files: v.array(v.id("files")),
-  }),
+    tokenIdentifier: v.string(),
+  })
+    .index("token_identifier", ["tokenIdentifier"]),
   files: defineTable({
     name: v.string(),
-    // fileUrl: v.string(),
-    // key: v.string(),
+    fileUrl: v.optional(v.string()),
     uploadStatus,
+    fileSize: v.optional(v.number()),
     fileId: v.id("_storage"),
-    userId: v.id("users"),
+    userId: v.string(),
   }),
 });
