@@ -17,3 +17,18 @@ export async function getUser(
 	}
 	return user;
 }
+
+
+export async function getUserById(
+	ctx: MutationCtx | QueryCtx,
+	userId: string,
+) {
+	const user = await ctx.db
+		.query("users")
+		.filter((q) => q.eq(q.field("clerkId"), userId))
+		.first();
+	if (!user) {
+		throw new ConvexError("User not found.");
+	}
+	return user;
+}

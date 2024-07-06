@@ -12,14 +12,13 @@ import { MessageSquare, Plus, TrashIcon } from "lucide-react";
 import { format, formatRelative, subDays } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import React from "react";
 
 const Dashboard = () => {
-  const { isAuthenticated } = useConvexAuth();
-  if (!isAuthenticated) return null;
   const user = useUser();
   const userId = user?.user?.id ?? "";
   console.log(userId);
-  const allFiles = useQuery(api.file.getAllFilesForUser, { userId });
+  const allFiles = useQuery(api.file.getAllFilesForUser, { userId: userId });
   const deleteFile = useMutation(api.file.deleteFile);
   const { toast } = useToast();
   const isLoading = allFiles == undefined;

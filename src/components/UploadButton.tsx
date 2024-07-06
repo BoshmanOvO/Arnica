@@ -11,7 +11,7 @@ import Dropzone from "react-dropzone";
 import { CloudUpload, File, Loader2 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
-import { useMutation } from "convex/react";
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
@@ -21,7 +21,6 @@ type UploadStatus = "pending" | "processing" | "failed" | "success";
 const UploadDropZone = () => {
   const user = useUser();
   const userId = user?.user?.id ?? ""; // user_1111
-
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [status, setStatus] = useState<UploadStatus>("pending");
@@ -29,7 +28,6 @@ const UploadDropZone = () => {
   const createFile = useMutation(api.file.createFile);
   const generateUploadUrl = useMutation(api.file.generateUploadUrl);
   const getFile = useMutation(api.file.getFile);
-
   const { toast } = useToast();
   const router = useRouter();
 
@@ -78,11 +76,12 @@ const UploadDropZone = () => {
             clerkId: userId,
             fileSize: accepted[0].size,
           });
-          const f = await getFile({ storageId });
           toast({
             title: `File named: ${accepted[0].name}, Uploaded successfully`,
             variant: "success",
           });
+          const f = await getFile({ storageId });
+          console.log(f?._id);
           router.push(`/dashboard/${f?._id}`);
         } catch (error) {
           setStatus("failed");
@@ -138,6 +137,9 @@ const UploadDropZone = () => {
                   <Progress
                     value={uploadProgress}
                     className={"h-1 w-full bg-zinc-200"}
+                    indicatorColor={
+                      uploadProgress === 100 ? "bg-green-500" : ""
+                    }
                   />
                   {uploadProgress === 100 ? (
                     <div

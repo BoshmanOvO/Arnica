@@ -20,7 +20,6 @@ export default defineSchema({
     .index("token_identifier", ["tokenIdentifier"]),
   files: defineTable({
     name: v.string(),
-    fileUrl: v.optional(v.string()),
     uploadStatus,
     fileSize: v.optional(v.number()),
     fileId: v.id("_storage"),

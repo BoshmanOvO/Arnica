@@ -1,7 +1,7 @@
 import { mutation, query } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 import { uploadStatus } from "./schema";
-import { getUser } from "./utils/userUtils";
+import {getUser, getUserById} from "./utils/userUtils";
 
 export const getUrl = query({
   args: {
@@ -64,12 +64,9 @@ export const getFile = mutation({
 export const getAllFilesForUser = query({
   args: { userId: v.string() },
   async handler(ctx, args) {
-    const identity = await ctx.auth.getUserIdentity();
-    console.log(identity?.tokenIdentifier);
-    if (!identity) {
-      throw new ConvexError(
-        "Not authenticated, you must log in to get the file",
-      );
+    const getUser = await getUserById(ctx, args.userId);
+    if (!getUser) {
+      throw new ConvexError("User not found.");
     }
     const file = await ctx.db
       .query("files")
@@ -94,5 +91,12 @@ export const deleteFile = mutation({
       );
     }
     await ctx.db.delete(args.fileId);
+  },
+});
+
+export const getFileById = query({
+  args: { fileId: v.id("files") },
+  async handler(ctx, args) {
+    return await ctx.db.get(args.fileId);
   },
 });
