@@ -12,14 +12,14 @@
 4. 🤸 [Quick Start](#quick-start)
 
 ## <a name="introduction">🤖 Introduction</a>
-Arnica is a modern full stack SaaS platform built with Next.js, Convex, OpenAI, and Tailwind CSS. It includes a beautiful landing page, pricing page, PDF viewer, streaming API responses, authentication, drag n’ drop uploads, and more.
+Arnica is a modern full-stack SaaS platform built with Next.js, Convex, OpenAI, and Tailwind CSS. It includes a beautiful landing page, pricing page, PDF viewer, streaming API responses, authentication, drag n’ drop uploads, and more.
 
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
 
-- Next.js 13.5
+- Next.js
 - TypeScript
-- Convex
+- Convex Database
 - OpenAI
 - ShadCN
 - Tailwind CSS
@@ -32,7 +32,7 @@ Arnica is a modern full stack SaaS platform built with Next.js, Convex, OpenAI, 
 - 💳 Free & Pro Plan Using Stripe
 - 📄 A Beautiful And Highly Functional PDF Viewer
 - 🔄 Streaming API Responses in Real-Time
-- 🔒 Authentication Using Kinde
+- 🔒 Authentication Using Clerk
 - 🎨 Clean, Modern UI Using 'ShadCN-UI'
 - 🚀 Optimistic UI Updates for a Great UX
 - ⚡ Infinite Message Loading for Performance
