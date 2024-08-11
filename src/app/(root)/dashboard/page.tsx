@@ -130,5 +130,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-// TODO : toast not working

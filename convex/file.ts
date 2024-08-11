@@ -1,7 +1,7 @@
 import { mutation, query } from "./_generated/server";
 import { ConvexError, v } from "convex/values";
 import { uploadStatus } from "./schema";
-import {getUser, getUserById} from "./utils/userUtils";
+import { getUserById } from "./utils/userUtils";
 
 export const getUrl = query({
   args: {
